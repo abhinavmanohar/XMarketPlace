@@ -13,7 +13,7 @@ CREATE TABLE `product_listing` (
    `id` int NOT NULL AUTO_INCREMENT,
    `user_id` int DEFAULT NULL,
    `product_id` int DEFAULT NULL,
-   `action` varchar(10) DEFAULT NULL,
+   `action` varchar(50) DEFAULT NULL,
    `created_at` date DEFAULT NULL,
    `metadata` json DEFAULT NULL,
    PRIMARY KEY (`id`),

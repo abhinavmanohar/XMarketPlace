@@ -51,30 +51,20 @@ public class AccountDetailsDTO {
         this.productName = productName;
     }
 
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
     private Integer transactionId;
     private Date createdAt;
     private String action;
     private Double walletAmount;
     private Double productAmount;
     private String productName;
-    private String userName;
 
-    public AccountDetailsDTO(Integer transactionId, Date createdAt, String action, Double walletAmount, Double productAmount, String productName, String userName) {
+    public AccountDetailsDTO(Integer transactionId, Date createdAt, String action, Double walletAmount, Double productAmount, String productName) {
         this.transactionId = transactionId;
         this.createdAt = createdAt;
         this.action = action;
         this.walletAmount = walletAmount;
         this.productAmount = productAmount;
         this.productName = productName;
-        this.userName = userName;
     }
 
 }

@@ -12,9 +12,9 @@ RUN mvn package -DskipTests
 FROM openjdk:17-oracle
 
 WORKDIR /app
-COPY --from=build /app/target/XMarket-1.0-SNAPSHOT.jar app.jar
+COPY --from=build /app/target/XMarket-1.0-SNAPSHOT.jar /app/app.jar
 
 EXPOSE 8080
 
 #COPY target/XMarket-1.0-SNAPSHOT.jar app.jar
-ENTRYPOINT ["java","-jar","/app.jar"]
+ENTRYPOINT ["java","-jar","/app/app.jar"]

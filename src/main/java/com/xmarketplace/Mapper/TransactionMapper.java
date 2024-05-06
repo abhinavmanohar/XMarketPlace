@@ -39,8 +39,7 @@ public class TransactionMapper {
                     transaction.getAction(),
                     transaction.getUser().getWalletBalance(),
                     transaction.getProductListing().getPrice(),
-                    transaction.getProductListing().getName(),
-                    transaction.getUser().getUserName()
+                    transaction.getProductListing().getName()
             );
             accountDetailsDTOs.add(accountDetailsDTO);
         });

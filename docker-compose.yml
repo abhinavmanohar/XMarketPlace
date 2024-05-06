@@ -1,0 +1,9 @@
+version: '3'
+services:
+  xmarketplace:
+    container_name: xmarketplace
+    build:
+      dockerfile: Dockerfile
+    image: xmarketplace:latest
+    ports:
+      - 8080:8080

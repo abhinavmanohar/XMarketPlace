@@ -21,11 +21,12 @@ public class TransactionMapper {
         entity.setUser(user);
         entity.setCreatedAt(dto.getCreatedAt());
         entity.setProductListing(productListing);
+        entity.setMetadata(dto.getMetadata());
         return entity;
     }
 
     public static TransactionDTO entityToDto(Transactions entity) {
-        TransactionDTO dto = new TransactionDTO(entity.getUser().getUserId(), entity.getProductListing().getId(), entity.getAction(),entity.getCreatedAt());
+        TransactionDTO dto = new TransactionDTO(entity.getUser().getUserId(), entity.getProductListing().getId(), entity.getAction(),entity.getCreatedAt(),entity.getMetadata());
         dto.setId(entity.getTransactionId());
         return dto;
     }

@@ -7,9 +7,9 @@ import com.xmarketplace.Entity.User;
 import com.xmarketplace.Mapper.ProductListingMapper;
 import com.xmarketplace.Mapper.TransactionMapper;
 import com.xmarketplace.Repository.ProductListingRepository;
+import com.xmarketplace.util.ActionEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import util.ActionEnum;
 
 import java.util.Date;
 import java.util.List;
@@ -45,7 +45,7 @@ public class ProductListingService {
         }
         productListing.setUser(seller);
         productListing = productListingRepository.save(productListing);
-        TransactionDTO transactionDTO = new TransactionDTO(userId, productListing.getId(), ActionEnum.SELL.toString(), new Date());
+        TransactionDTO transactionDTO = new TransactionDTO(userId, productListing.getId(), ActionEnum.SELL.toString(), new Date(),null);
         transactionsService.save(TransactionMapper.dtoToEntity(transactionDTO,seller,productListing));
       }else{
           throw new Exception("User Id not available");

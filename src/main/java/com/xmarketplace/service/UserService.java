@@ -21,10 +21,13 @@ public class UserService {
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
-    public boolean updateUserWallet(int id, double amount) {
+    public boolean updateUserWallet(int id, double amount) throws Exception {
         Optional<User> user = userRepository.findById(id);
         if (user.isPresent()) {
             user.get().setWalletBalance(user.get().getWalletBalance() + amount);
+            if(user.get().getWalletBalance() < 0) {
+                throw new Exception("Transaction can not be completed");
+            }
             userRepository.save(user.get());
             return true;
         }

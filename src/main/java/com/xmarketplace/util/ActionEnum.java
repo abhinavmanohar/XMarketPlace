@@ -1,5 +1,5 @@
-package util;
+package com.xmarketplace.util;
 
 public enum ActionEnum {
-    SELL,BUY
+    SELL,BUY,SETTLEMENT_TRANSFER
 }

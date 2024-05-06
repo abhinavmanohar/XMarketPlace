@@ -1,14 +1,15 @@
 package com.xmarketplace.service;
 
+import com.google.gson.JsonObject;
 import com.xmarketplace.DTO.AccountDetailsDTO;
 import com.xmarketplace.DTO.ProductListingDTO;
 import com.xmarketplace.DTO.TransactionDTO;
 import com.xmarketplace.Entity.ProductListing;
 import com.xmarketplace.Entity.Transactions;
 import com.xmarketplace.Entity.User;
-import com.xmarketplace.Mapper.AccountDetailsMapper;
 import com.xmarketplace.Mapper.TransactionMapper;
 import com.xmarketplace.Repository.TransactionsRepository;
+import com.xmarketplace.util.ActionEnum;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -87,25 +88,36 @@ public class TransactionsService {
             if (productListing ==  null) {
                 throw new Exception("Invalid Product Id");
             }
-            double amountPaidToSupki = productListing.getPrice() * 0.1;
-            double amountPaidToSeller = productListing.getPrice() * 0.9;
-
+            double productAmount = productListing.getPrice();
             // payment is successful to Supaki
-            if (!userService.updateUserWallet(getSUPAKIUserId(), amountPaidToSupki)) {
+            if (!userService.updateUserWallet(getSUPAKIUserId(), productAmount)) {
                 throw new Exception("Payment failed");
             }
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("transaction_amount", productAmount);
+            TransactionDTO transactionDTO = new TransactionDTO(buyer.getUserId(), productId, ActionEnum.BUY.toString(), new Date(), jsonObject.toString());
+            save(TransactionMapper.dtoToEntity(transactionDTO,buyer,productListing));
 
-            if (userService.GetUserById(productListing.getUser().getUserId()).isPresent()){
+        if (userService.GetUserById(productListing.getUser().getUserId()).isPresent()){
+                double amountPaidToSupaki = productListing.getPrice() * 0.1;
+                double amountPaidToSeller = productListing.getPrice() * 0.9;
                 User seller = userService.GetUserById(productListing.getUser().getUserId()).get();
-               //payment is successful to seller
+                if (!userService.updateUserWallet(getSUPAKIUserId(), -amountPaidToSeller)) {
+                    throw new Exception("Payment failed");
+                }
+                //payment is successful to seller
                 if(!userService.updateUserWallet(seller.getUserId(), amountPaidToSeller)){
                     throw new Exception("Payment failed");
                 }
+                JsonObject settlementObject = new JsonObject();
+                settlementObject.addProperty("settlement_amount", amountPaidToSeller);
+                settlementObject.addProperty("commission_amount", amountPaidToSupaki);
+                settlementObject.addProperty("settlement_transferred_to",seller.getUserId());
+                TransactionDTO settlement = new TransactionDTO(getSUPAKIUserId(), productId, ActionEnum.SETTLEMENT_TRANSFER.toString(), new Date(), settlementObject.toString());
+                save(TransactionMapper.dtoToEntity(settlement,userService.GetUserById(getSUPAKIUserId()).get(),productListing));
                 // update quantity of product
                 productListingService.updateProductListing(productListing);
-                // transaction table update
-                TransactionDTO transactionDTO = new TransactionDTO(buyer.getUserId(), productId, "BUY", new Date());
-                save(TransactionMapper.dtoToEntity(transactionDTO,buyer,productListing));
+
                 lock.unlock();
             }else{
                 throw new Exception("User Id not available");

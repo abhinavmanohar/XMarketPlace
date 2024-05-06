@@ -8,7 +8,7 @@ WORKDIR /app
 COPY pom.xml .
 COPY src ./src
 
-RUN mvn package -DskipTests
+RUN mvn package
 FROM openjdk:17-oracle
 
 WORKDIR /app

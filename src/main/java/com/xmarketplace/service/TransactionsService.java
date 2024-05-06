@@ -132,5 +132,11 @@ public class TransactionsService {
         }
         return Collections.emptyList();
     }
+    public List<Transactions> getAllTransactionDetails() {
+        if(transactionRepository.findAll().isEmpty()){
+            return Collections.emptyList();
+        }
+        return transactionRepository.findAll();
+    }
 
 }

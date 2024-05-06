@@ -14,6 +14,8 @@ public class ProductListingDTO {
     private double price;
     private int quantity;
 
+    public ProductListingDTO() {
+    }
 
     public ProductListingDTO(String name, double price, int quantity,Integer id) {
         this.name = name;
